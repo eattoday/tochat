@@ -10,17 +10,17 @@
 
 ```xml
     <!-- mysql -->
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-</dependency>
-
-        <!-- mybatis-plus -->
-<dependency>
-<groupId>com.baomidou</groupId>
-<artifactId>mybatis-plus-boot-starter</artifactId>
-<version>3.4.3.4</version>
-</dependency>
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+    </dependency>
+    
+    <!-- mybatis-plus -->
+    <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-boot-starter</artifactId>
+        <version>3.4.3.4</version>
+    </dependency>
 ```
 
 2.配置数据源 [applycation-dev.yml](./src/main/resources/application-dev.yml)
@@ -44,7 +44,7 @@
 
 ```java
     @Autowired
-private SpUserMapper spUserMapper;
+    private SpUserMapper spUserMapper;
 ```
 
 - 使用父类接口实现的方法
@@ -58,12 +58,11 @@ private SpUserMapper spUserMapper;
 1.配置 pom.xml
 
 ```xml
-
-<dependency>
-    <groupId>com.github.xiaoymin</groupId>
-    <artifactId>knife4j-spring-boot-starter</artifactId>
-    <version>3.0.3</version>
-</dependency>
+    <dependency>
+        <groupId>com.github.xiaoymin</groupId>
+        <artifactId>knife4j-spring-boot-starter</artifactId>
+        <version>3.0.3</version>
+    </dependency>
 ```
 
 2.创建配置类 [Knife4jConfiguration.java](./src/main/java/com/dawu/tochat/config/Knife4jConfiguration.java)
@@ -80,7 +79,7 @@ private SpUserMapper spUserMapper;
 
 ```java
     @ApiOperation(value = "测试1")
-@ApiImplicitParam(name = "tableName", value = "表名", required = true)
+    @ApiImplicitParam(name = "tableName", value = "表名", required = true)
 ```
 
 4.启动工程后[验证测试](http://localhost:8080/doc.html)
@@ -93,17 +92,17 @@ private SpUserMapper spUserMapper;
 
 ```xml
     <!--  swagger 增强   -->
-<dependency>
-    <groupId>com.github.xiaoymin</groupId>
-    <artifactId>knife4j-spring-boot-starter</artifactId>
-    <version>3.0.3</version>
-</dependency>
+    <dependency>
+        <groupId>com.github.xiaoymin</groupId>
+        <artifactId>knife4j-spring-boot-starter</artifactId>
+        <version>3.0.3</version>
+    </dependency>
 
-        <!--   lombok     -->
-<dependency>
-<groupId>org.projectlombok</groupId>
-<artifactId>lombok</artifactId>
-</dependency>
+    <!--   lombok     -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+    </dependency>
 ```
 
 2.配置 application.yml
@@ -128,14 +127,14 @@ logging:
 
 ```java
     //日志的级别
-//从低到高
-//可以调整输出的日志级别；日志就只会在这个级别以后的高级别生效
+    //从低到高
+    //可以调整输出的日志级别；日志就只会在这个级别以后的高级别生效
     log.trace("这是trace日志");
-            log.debug("这是debug信息");
-            //SpringBoot默认给的是info级别，如果没指定就是默认的root级别
-            log.info("这是info日志");
-            log.warn("这是warn信息");
-            log.error("这是Error信息");
+    log.debug("这是debug信息");
+    //SpringBoot默认给的是info级别，如果没指定就是默认的root级别
+    log.info("这是info日志");
+    log.warn("这是warn信息");
+    log.error("这是Error信息");
 ```
 
 ## Scheduled
@@ -152,20 +151,20 @@ logging:
 
 ```java
     // 定时每分钟提醒提醒
-@Scheduled(cron = "0 * * * * ?")
-private void testJobByCron(){
+    @Scheduled(cron = "0 * * * * ?")
+    private void testJobByCron(){
         log.trace("开始任务 : "+LocalDateTime.now());
         log.trace("定时任务时间为 : "+LocalDateTime.now());
         log.trace("结束任务 : "+LocalDateTime.now());
-        }
+    }
 
-// 直接指定时间间隔，例如：5秒
-@Scheduled(fixedRate = 5000)
-private void testJobByFixedRate(){
+    // 直接指定时间间隔，例如：5秒   
+    @Scheduled(fixedRate = 5000)
+    private void testJobByFixedRate(){
         log.trace("开始任务 : "+LocalDateTime.now());
         log.trace("间隔5秒任务 : "+LocalDateTime.now());
         log.trace("结束任务 : "+LocalDateTime.now());
-        }
+    }
 ```
 
 ## Quartz
