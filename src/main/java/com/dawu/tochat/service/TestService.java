@@ -1,5 +1,6 @@
 package com.dawu.tochat.service;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -27,16 +28,17 @@ public class TestService {
     private SqlSessionFactory sqlSessionFactory;
 
     public String testMybatis(String tableName) {
+        BaseMapper baseMapper = SpringUtil.getBean(tableName + "Mapper");
+        Class<?> tableClazz = SpringUtil.getBeanFactory().getType(tableName);
+        String[] beanDefinitionNames = SpringUtil.getBeanFactory().getBeanDefinitionNames();
 
         Map<String, Object> param = new HashMap();
         Map<String, Object> queryParam = new HashMap();
         param.put("userName", "a");
         param.put("user_id", "1");
 
-        BaseMapper baseMapper = MyUtils.getBaseMapper(sqlSessionFactory, tableName);
-
         for (String key : param.keySet()) {
-            Field field = MyUtils.getField(key, MyUtils.getDomainClazz(tableName));
+            Field field = MyUtils.getField(key,tableClazz );
             TableField annotation = null;
             if (field != null) {
                 annotation = field.getAnnotation(TableField.class);

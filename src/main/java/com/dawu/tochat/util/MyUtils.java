@@ -16,14 +16,12 @@ import java.util.Map;
  */
 public class MyUtils {
     private static List<String> mapperPackageList;
-
     {
         mapperPackageList = new ArrayList<>();
         mapperPackageList.add("com.dawu.tochat.mapper.");
     }
 
     private static List<String> domainPackageList;
-
     {
         domainPackageList = new ArrayList<>();
         domainPackageList.add("com.dawu.tochat.domain.");
@@ -40,22 +38,14 @@ public class MyUtils {
         return null;
     }
 
-    public static Class<?> getMapperClazz(String tableName) {
+    public static BaseMapper getBaseMapper(SqlSessionFactory sqlSessionFactory, String tableName) {
         for (String mapperPackage : mapperPackageList) {
             Class<?> mapperClass = getClazz(mapperPackage + tableName + "Mapper");
             if (mapperClass != null) {
-                return mapperClass;
+                return (BaseMapper) sqlSessionFactory.openSession().getMapper(mapperClass);
             }
         }
         return null;
-    }
-
-    public static BaseMapper getBaseMapper(SqlSessionFactory sqlSessionFactory, String tableName) {
-        Class<?> mapperClazz = getMapperClazz(tableName);
-        if (mapperClazz == null) {
-            return null;
-        }
-        return (BaseMapper) sqlSessionFactory.openSession().getMapper(mapperClazz);
     }
 
     public static Class<?> getClazz(String tableName) {

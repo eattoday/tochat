@@ -1,16 +1,37 @@
 package com.dawu.tochat.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dawu.tochat.service.TestService;
+import com.dawu.tochat.util.OkHttp3Util;
+import com.dawu.tochat.util.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 
 
 /**
@@ -24,18 +45,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class TestController {
 
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
 
     @Autowired
     private TestService testService;
 
     @ResponseBody
-    @GetMapping("/test")
+    @PostMapping("/test")
     @ApiOperation(value = "动态测试,随时变更")
     public String test() {
         try {
-            System.out.println("测试成功!");
+
+
+            RedisUtils.setCacheObject("testString", "test1");
+            String testString = RedisUtils.getCacheObject("testString");  // testString = test1
+
+            Map map=new HashMap();
+            map.put("test1","11");
+            map.put("test2","22");
+            RedisUtils.setCacheMap("testMap", map);
+            Map testMap = RedisUtils.getCacheMap("testMap");    // testMap = {"test2":"22","test1":"11"}
+
+            RedisUtils.setCacheList("testList", Arrays.asList("111","222"));
+            List testList = RedisUtils.getCacheList("testList");    // testList = ["111","222"]
+
+            Set set=new HashSet();
+            set.add("111");
+            set.add("222");
+            RedisUtils.setCacheSet("testSet", set);
+            Set testSet = RedisUtils.getCacheSet("testSet");    // testSet = ["222","111"]
+
         } catch (Exception e) {
             e.printStackTrace();
             return "请求报错";
@@ -51,26 +89,6 @@ public class TestController {
         return testService.testMybatis(tableName);
     }
 
-    @ResponseBody
-    @GetMapping("/test2")
-    @ApiOperation(value = "动态测试,随时变更")
-    public String testLog() {
-        try {
-            //日志的级别
-            //从低到高
-            //可以调整输出的日志级别；日志就只会在这个级别以后的高级别生效
-            log.trace("这是trace日志");
-            log.debug("这是debug信息");
-            //SpringBoot默认给的是info级别，如果没指定就是默认的root级别
-            log.info("这是info日志");
-            log.warn("这是warn信息");
-            log.error("这是Error信息");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "请求报错";
-        }
-        return "请求成功";
-    }
 
     @ResponseBody
     @GetMapping("/test3")
@@ -78,5 +96,6 @@ public class TestController {
 
 
     }
+
 
 }

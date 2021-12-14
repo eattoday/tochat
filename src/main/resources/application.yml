@@ -10,14 +10,19 @@ spring:
   profiles:
     active: dev
     include:
+      - config-default
       - config-mybatis
+      - config-redisson
 
-
-
-logging:
-  level:
-    com.dawu: trace
-    org.springframework: warn
-  config: classpath:logback.xml
-
-
+# 项目相关配置
+project:
+  # 名称
+  name: tochat
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2021
+  # 上传地址
+  profile: /opt/project/ItcEye/uploadPath
+  # 包地址
+  package: com.dawu.tochat

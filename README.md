@@ -167,6 +167,138 @@ logging:
     }
 ```
 
+## Redisson && Spring Cache
+
+1.配置 pom.xml
+
+```xml
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+```
+
+2.配置数据源 [applycation-dev.yml](./src/main/resources/application-dev.yml)
+
+3.创建配置文件 [application-config-redisson.yml](./src/main/resources/application-config-redisson.yml)
+
+4.创建配置类 [RedisConfig.java](./src/main/java/com/dawu/tochat/config/RedisConfig.java)
+  创建配置文件 [RedissonProperties.java](./src/main/java/com/dawu/tochat/config/RedissonProperties.java)
+
+5.创建工具类 [RedisUtils.java](./src/main/java/com/dawu/tochat/util/RedisUtils.java)
+
+6.Redis 使用示例 
+
+```java
+    RedisUtils.setCacheObject("testString", "test1");
+    String testString = RedisUtils.getCacheObject("testString");  // testString = test1
+
+    Map map=new HashMap();
+    map.put("test1","11");
+    map.put("test2","22");
+    RedisUtils.setCacheMap("testMap", map);
+    Map testMap = RedisUtils.getCacheMap("testMap");    // testMap = {"test2":"22","test1":"11"}
+
+    RedisUtils.setCacheList("testList", Arrays.asList("111","222"));
+    List testList = RedisUtils.getCacheList("testList");    // testList = ["111","222"]
+
+    Set set=new HashSet();
+    set.add("111");
+    set.add("222");
+    RedisUtils.setCacheSet("testSet", set);
+    Set testSet = RedisUtils.getCacheSet("testSet");    // testSet = ["222","111"]
+```
+
+7.Cache 使用示例,在需要配置的方法上增加注解
+
+```java
+    // 先查看是否存在缓存,若存在则直接获取,若不存在则经过方法读取后存入缓存
+    @Cacheable(cacheNames="redissonCacheMap", key="#tableName + #id")
+    
+    // 直接将结果存入缓存
+    @CachePut(cacheNames="redissonCacheMap", key="#tableName + #id")
+    
+    // 删除对应缓存
+    @CacheEvict(cacheNames="redissonCacheMap", key="#tableName + #id")
+```
+
+## SpringBoot Admin
+
+1.服务端配置 pom.xml
+
+```xml
+   <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>de.codecentric</groupId>
+        <artifactId>spring-boot-admin-starter-server</artifactId>
+    </dependency>
+```
+
+2.服务端配置 application.yml
+
+```yaml
+server:
+  port: 9090
+spring:
+  security:
+    user:
+      name: ruoyi
+      password: 123456
+  boot:
+    admin:
+      context-path: /admin
+```
+
+3.服务端启动类增加注解(目前看来不加也可以)
+
+```java
+@EnableAdminServer
+```
+
+4.客户端配置 pom.xml
+
+```xml
+    <!--springboot Admin 客户端-->
+    <dependency>
+        <groupId>de.codecentric</groupId>
+        <artifactId>spring-boot-admin-starter-client</artifactId>
+        <version>2.5.1</version>
+    </dependency>
+```
+
+5.客户端配置 application.yml
+
+```yaml
+--- # Spring Boot Admin Client 客户端的相关配置
+spring:
+  boot:
+    admin:
+      client:
+        # 增加客户端开关
+        enabled: true
+        # 设置 Spring Boot Admin Server 地址
+        url: http://localhost:9090/admin
+        instance:
+          prefer-ip: true # 注册实例时，优先使用 IP
+        username: ruoyi
+        password: 123456
+        
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+```
+
+6.启动两个工程,访问服务端 [验证测试](http://localhost:9090/admin)
+
 ## Quartz
 
 1.配置 pom.xml

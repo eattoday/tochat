@@ -1,8 +1,12 @@
 package com.dawu.tochat.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -10,17 +14,21 @@ import java.io.Serializable;
  * @TableName sp_user
  */
 @TableName(value = "sp_user")
+@Component
+@ApiModel("用户实体类")
 public class SpUser implements Serializable {
-    /**
-     *
-     */
-    @TableId
-    private String userId;
 
     /**
      *
      */
+    @ApiModelProperty(value = "用户ID",notes = "eq")
+    @TableId(type = IdType.ASSIGN_UUID)
+    private String userId;
+    /**
+     *
+     */
     @TableField("user_name")
+    @ApiModelProperty(value = "用户ID",notes = "like")
     private String userName;
 
     /**

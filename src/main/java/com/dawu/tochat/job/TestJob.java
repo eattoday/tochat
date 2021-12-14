@@ -28,14 +28,31 @@ public class TestJob {
         log.trace("结束任务 : " + LocalDateTime.now());
     }
 
-    // 直接指定时间间隔，例如：5秒
-    @Scheduled(fixedRate = 5000)
-    private void testJobByFixedRate() {
-        log.trace("开始任务 : " + LocalDateTime.now());
+//    // 直接指定时间间隔，例如：5秒
+//    @Scheduled(fixedRate = 5000)
+//    private void testJobByFixedRate() {
+//        log.trace("开始任务 : " + LocalDateTime.now());
+//
+//        log.trace("间隔5秒任务 : " + LocalDateTime.now());
+//
+//        log.trace("结束任务 : " + LocalDateTime.now());
+//    }
 
-        log.trace("间隔5秒任务 : " + LocalDateTime.now());
 
-        log.trace("结束任务 : " + LocalDateTime.now());
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

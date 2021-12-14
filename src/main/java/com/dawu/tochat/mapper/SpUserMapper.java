@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @createDate 2021-11-26 11:40:08
  * @Entity com.dawu.tochat.domain.SpUser
  */
-@Component
+@Component()
 public interface SpUserMapper extends BaseMapper<SpUser> {
 
 }
